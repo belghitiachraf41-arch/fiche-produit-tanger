@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chemise Lin Tanger</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Karla:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: fiche e-commerce en deux colonnes (visuel + infos), puis tableaux de données pleine largeur */
+:root{
+  --bg:#f7f6f2; --surface:#ffffff; --fg:#22261f; --muted:#646a5c; --line:#dcdcd2; --accent:#5b6b3e; --chip:#eef0e6;
+  --display:"Fraunces",Georgia,serif; --body:"Karla",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171a15;--surface:#1f231c;--fg:#e8eadf;--muted:#a3a896;--line:#363b30;--accent:#a9bd7c;--chip:#2a3024;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#171a15;--surface:#1f231c;--fg:#e8eadf;--muted:#a3a896;--line:#363b30;--accent:#a9bd7c;--chip:#2a3024;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.6}
+.wrap{max-width:980px;margin:0 auto;padding-inline:20px;padding-block:32px 48px;display:grid;gap:40px}
+.crumb{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.04em}
+.top{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start}
+@media (max-width:760px){.top{grid-template-columns:1fr}}
+.visual{max-width:100%;background:var(--surface);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.visual img{display:block;width:100%;height:auto}
+.info{display:grid;gap:18px;min-width:0}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(28px,4vw,38px);line-height:1.15;margin:0;text-wrap:balance}
+.price{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums}
+.price small{font-size:14px;font-weight:400;color:var(--muted);margin-left:8px}
+.lead{margin:0;max-width:60ch}
+.opts{display:grid;gap:8px}
+.lbl{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+.sw{display:flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid var(--line);border-radius:99px;font-size:14px;background:var(--surface)}
+.dot{width:14px;height:14px;border-radius:50%;border:1px solid var(--line)}
+.sz{min-width:44px;text-align:center;padding:6px 10px;border:1px solid var(--line);border-radius:4px;font-family:var(--mono);font-size:13px;background:var(--surface)}
+ul.feat{margin:0;padding-left:18px;display:grid;gap:4px}
+section{display:grid;gap:14px}
+h2{font-family:var(--display);font-weight:500;font-size:22px;margin:0}
+.note{font-size:14px;color:var(--muted);margin:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+tr:last-child td{border-bottom:0}
+td.mono{font-family:var(--mono);font-size:13px}
+.low{display:inline-block;padding:1px 8px;border-radius:99px;background:var(--chip);color:var(--accent);font-size:12px;font-weight:700}
+.specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;border-top:1px solid var(--line)}
+.specs div{padding:12px 0;border-bottom:1px solid var(--line);display:grid;gap:2px}
+.specs dt{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+.specs dd{margin:0}
+.check{display:grid;gap:6px;margin:0;padding:0;list-style:none;font-size:14px}
+.check li::before{content:"✓ ";color:var(--accent);font-weight:700}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="crumb">ATELIER NOUR / HOMME / CHEMISES</div>
+
+  <div class="top">
+    <div class="visual">
+      <img src="chemise-tanger.jpg" alt="Chemise Tanger en lin écru portée de face et de dos, avec détails du tissu, du col, de la manche et de la base" width="1024" height="1536">
+    </div>
+
+    <div class="info">
+      <h1>Chemise Tanger en lin lavé, coupe droite</h1>
+      <div class="price">349 MAD <small>TVA incluse · Livraison 48 h au Maroc</small></div>
+      <p class="lead">Une chemise légère pensée pour les journées chaudes, en lin 100 % lavé qui devient plus souple à chaque lavage. Sa coupe droite tombe bien rentrée ou portée ouverte sur un t-shirt, du bureau à la plage.</p>
+
+      <div class="opts">
+        <span class="lbl">Couleur</span>
+        <div class="row">
+          <span class="sw"><span class="dot" style="background:#ece6d8"></span>Écru</span>
+          <span class="sw"><span class="dot" style="background:#6f7b52"></span>Olive</span>
+          <span class="sw"><span class="dot" style="background:#3b4a63"></span>Bleu nuit</span>
+        </div>
+      </div>
+      <div class="opts">
+        <span class="lbl">Taille</span>
+        <div class="row"><span class="sz">S</span><span class="sz">M</span><span class="sz">L</span><span class="sz">XL</span></div>
+      </div>
+
+      <ul class="feat">
+        <li>Lin européen 100 %, grammage 150 g/m²</li>
+        <li>Col classique, boutons en nacre végétale (corozo)</li>
+        <li>Une poche poitrine, base arrondie</li>
+        <li>Lavable en machine à 30 °C</li>
+      </ul>
+    </div>
+  </div>
+
+  <section>
+    <h2>Caractéristiques</h2>
+    <dl class="specs">
+      <div><dt>Matière</dt><dd>100 % lin lavé</dd></div>
+      <div><dt>Grammage</dt><dd>150 g/m²</dd></div>
+      <div><dt>Coupe</dt><dd>Droite, longueur hanche</dd></div>
+      <div><dt>Fermeture</dt><dd>7 boutons corozo</dd></div>
+      <div><dt>Entretien</dt><dd>30 °C, séchage à plat, repassage doux</dd></div>
+      <div><dt>Fabrication</dt><dd>Confectionnée à Tanger</dd></div>
+    </dl>
+  </section>
+
+  <section>
+    <h2>Variantes et stock</h2>
+    <p class="note">Format SKU : marque, modèle, couleur, taille. Seuil d'alerte réassort fixé à 10 unités.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>SKU</th><th>Couleur</th><th>Taille</th><th>Stock</th><th>Statut</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">AN-TNG-ECR-S</td><td>Écru</td><td>S</td><td>18</td><td>En stock</td></tr>
+        <tr><td class="mono">AN-TNG-ECR-M</td><td>Écru</td><td>M</td><td>32</td><td>En stock</td></tr>
+        <tr><td class="mono">AN-TNG-ECR-L</td><td>Écru</td><td>L</td><td>27</td><td>En stock</td></tr>
+        <tr><td class="mono">AN-TNG-ECR-XL</td><td>Écru</td><td>XL</td><td>9</td><td><span class="low">Réassort</span></td></tr>
+        <tr><td class="mono">AN-TNG-OLV-S</td><td>Olive</td><td>S</td><td>12</td><td>En stock</td></tr>
+        <tr><td class="mono">AN-TNG-OLV-M</td><td>Olive</td><td>M</td><td>24</td><td>En stock</td></tr>
+        <tr><td class="mono">AN-TNG-OLV-L</td><td>Olive</td><td>L</td><td>20</td><td>En stock</td></tr>
+        <tr><td class="mono">AN-TNG-OLV-XL</td><td>Olive</td><td>XL</td><td>6</td><td><span class="low">Réassort</span></td></tr>
+        <tr><td class="mono">AN-TNG-BLN-S</td><td>Bleu nuit</td><td>S</td><td>15</td><td>En stock</td></tr>
+        <tr><td class="mono">AN-TNG-BLN-M</td><td>Bleu nuit</td><td>M</td><td>29</td><td>En stock</td></tr>
+        <tr><td class="mono">AN-TNG-BLN-L</td><td>Bleu nuit</td><td>L</td><td>22</td><td>En stock</td></tr>
+        <tr><td class="mono">AN-TNG-BLN-XL</td><td>Bleu nuit</td><td>XL</td><td>11</td><td>En stock</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Guide des tailles</h2>
+    <p class="note">Mesures du vêtement à plat, en centimètres, tolérance ± 1 cm. Le mannequin mesure 1,80 m et porte la taille M.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Taille</th><th>Tour de poitrine</th><th>Longueur dos</th><th>Épaules</th><th>Longueur manche</th></tr></thead>
+      <tbody>
+        <tr><td>S</td><td>104</td><td>72</td><td>44</td><td>62</td></tr>
+        <tr><td>M</td><td>110</td><td>74</td><td>46</td><td>63</td></tr>
+        <tr><td>L</td><td>116</td><td>76</td><td>48</td><td>64</td></tr>
+        <tr><td>XL</td><td>122</td><td>78</td><td>50</td><td>65</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Contrôle avant mise en ligne</h2>
+    <ul class="check">
+      <li>Titre sous 70 caractères, avec matière et coupe</li>
+      <li>12 SKU uniques, aucune variante sans stock renseigné</li>
+      <li>Mesures du guide cohérentes d'une taille à l'autre (+6 cm de poitrine par taille)</li>
+      <li>Couleurs des pastilles identiques aux noms de variantes</li>
+      <li>Consignes d'entretien conformes à l'étiquette</li>
+    </ul>
+  </section>
+
+  <footer>Exercice de portfolio réalisé par Achraf Belghiti. Atelier Nour est une marque fictive créée pour cet exemple.</footer>
+</div>
+</body>
+</html>
