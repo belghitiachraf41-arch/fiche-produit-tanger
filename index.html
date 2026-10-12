@@ -39,7 +39,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 .visual:hover img{transform:scale(1.04)}
 .visual .hint{position:absolute;left:12px;bottom:12px;padding:4px 10px;border-radius:99px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;opacity:0;transform:translateY(6px);transition:.3s var(--ease)}
 .visual:hover .hint{opacity:1;transform:none}
-.visual .tint{position:absolute;inset:0;pointer-events:none;mix-blend-mode:multiply;opacity:0;transition:opacity .5s,background .5s}
+.visual img.next{position:absolute;inset:0;opacity:0;transition:opacity .55s var(--ease),transform .5s var(--ease)}
+.visual img.next.show{opacity:1}
 
 .info{display:grid;gap:18px;min-width:0}
 h1{font-family:var(--display);font-weight:600;font-size:clamp(28px,4vw,38px);line-height:1.15;margin:0;text-wrap:balance}
@@ -175,8 +176,7 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
 
   <div class="top">
     <div class="visual in" id="visual" style="animation-delay:.1s" role="button" tabindex="0" aria-label="Agrandir l'image">
-      <img src="chemise-tanger.jpg" alt="Chemise Tanger en lin écru portée de face et de dos, avec détails du tissu, du col, de la manche et de la base" width="1024" height="1536">
-      <span class="tint" id="tint"></span>
+      <img id="mainImg" src="chemise-tanger.jpg" alt="Chemise Tanger en lin écru portée de face et de dos, avec détails du tissu, du col, de la manche et de la base" width="1024" height="1536">
       <span class="hint">Cliquer pour agrandir</span>
     </div>
 
@@ -276,7 +276,7 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <div class="lb" id="lb" aria-hidden="true">
-  <img src="chemise-tanger.jpg" alt="Chemise Tanger en grand format">
+  <img id="lbImg" src="chemise-tanger.jpg" alt="Chemise Tanger en grand format">
   <button id="lbClose" aria-label="Fermer">×</button>
 </div>
 
@@ -293,9 +293,9 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
 <script>
 const PRICE = 349;
 const COLORS = [
-  {code:"ECR", name:"Écru", hex:"#ece6d8", tint:"transparent"},
-  {code:"OLV", name:"Olive", hex:"#6f7b52", tint:"#8a9568"},
-  {code:"BLN", name:"Bleu nuit", hex:"#3b4a63", tint:"#5b6d8c"}
+  {code:"ECR", name:"Écru", hex:"#ece6d8", img:"chemise-tanger.jpg"},
+  {code:"OLV", name:"Olive", hex:"#6f7b52", img:"chemise-tanger-olive.jpg"},
+  {code:"BLN", name:"Bleu nuit", hex:"#2b3550", img:"chemise-tanger-bleu-nuit.jpg"}
 ];
 const SIZES = ["S","M","L","XL"];
 const STOCK = {ECR:{S:18,M:32,L:27,XL:9}, OLV:{S:12,M:24,L:20,XL:6}, BLN:{S:15,M:29,L:22,XL:11}};
@@ -350,14 +350,29 @@ function select(c, s){
   document.querySelectorAll("#variants tr").forEach(r => r.classList.toggle("hl", r.dataset.v === c + s));
   $("colorName").textContent = col.name;
   $("sizeName").textContent = s;
-  $("tint").style.background = col.tint;
-  $("tint").style.opacity = c === "ECR" ? 0 : .35;
+  swapImage(col);
   const n = STOCK[c][s];
   $("stock").classList.toggle("low", n < 10);
   $("stockTxt").textContent = n < 10 ? `Plus que ${n} pièces, réassort prévu` : `En stock, ${n} pièces disponibles`;
   $("sku").textContent = `SKU AN-TNG-${c}-${s}`;
   if (qty > n) setQty(n);
   updatePrice();
+}
+// Changement de photo en fondu selon la couleur
+COLORS.forEach(c => { const i = new Image(); i.src = c.img; });
+let swapping = null;
+function swapImage(col){
+  const main = $("mainImg");
+  $("lbImg").src = col.img;
+  if (main.getAttribute("src") === col.img) return;
+  const alt = `Chemise Tanger en lin ${col.name.toLowerCase()} portée de face et de dos, avec détails du tissu, du col, de la manche et de la base`;
+  if (swapping) swapping.remove();
+  const next = document.createElement("img");
+  next.className = "next"; next.src = col.img; next.alt = ""; swapping = next;
+  $("visual").insertBefore(next, main.nextSibling);
+  const done = () => { main.src = col.img; main.alt = alt; setTimeout(() => { next.remove(); if (swapping === next) swapping = null; }, 60); };
+  const go = () => { requestAnimationFrame(() => next.classList.add("show")); setTimeout(done, 560); };
+  next.complete ? go() : next.onload = go;
 }
 function setQty(v){
   qty = Math.max(1, Math.min(v, STOCK[color][size]));
