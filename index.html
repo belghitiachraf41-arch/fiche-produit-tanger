@@ -6,21 +6,41 @@
 <title>Chemise Lin Tanger</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Karla:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: fiche e-commerce en deux colonnes (visuel + infos), puis tableaux de données pleine largeur */
 :root{
-  --bg:#f7f6f2; --surface:#ffffff; --fg:#22261f; --muted:#646a5c; --line:#dcdcd2; --accent:#5b6b3e; --chip:#eef0e6;
+  --bg:#f7f6f2; --surface:#ffffff; --fg:#22261f; --muted:#646a5c; --line:#dcdcd2; --accent:#5b6b3e; --accent-fg:#ffffff; --chip:#eef0e6; --warn:#a0522d;
   --display:"Fraunces",Georgia,serif; --body:"Karla",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --ease:cubic-bezier(.2,.7,.2,1);
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171a15;--surface:#1f231c;--fg:#e8eadf;--muted:#a3a896;--line:#363b30;--accent:#a9bd7c;--chip:#2a3024;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#171a15;--surface:#1f231c;--fg:#e8eadf;--muted:#a3a896;--line:#363b30;--accent:#a9bd7c;--chip:#2a3024;color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171a15;--surface:#1f231c;--fg:#e8eadf;--muted:#a3a896;--line:#363b30;--accent:#a9bd7c;--accent-fg:#171a15;--chip:#2a3024;--warn:#e0a07a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#171a15;--surface:#1f231c;--fg:#e8eadf;--muted:#a3a896;--line:#363b30;--accent:#a9bd7c;--accent-fg:#171a15;--chip:#2a3024;--warn:#e0a07a;color-scheme:dark}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.6}
-.wrap{max-width:980px;margin:0 auto;padding-inline:20px;padding-block:32px 48px;display:grid;gap:40px}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.6;transition:background .4s,color .4s}
+button{font:inherit;color:inherit;cursor:pointer}
+.bar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar-in{max-width:980px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-family:var(--display);font-weight:600;font-size:18px;letter-spacing:.02em}
+.tools{display:flex;gap:8px;align-items:center}
+.icon-btn{position:relative;display:grid;place-items:center;width:40px;height:40px;border:1px solid var(--line);border-radius:50%;background:var(--surface);transition:transform .2s var(--ease),border-color .2s}
+.icon-btn:hover{transform:translateY(-2px);border-color:var(--accent)}
+.icon-btn svg{width:18px;height:18px}
+.badge{position:absolute;top:-4px;right:-4px;min-width:20px;height:20px;padding:0 5px;border-radius:99px;background:var(--accent);color:var(--accent-fg);font-size:11px;font-weight:700;display:grid;place-items:center;transform:scale(0);transition:transform .3s var(--ease)}
+.badge.on{transform:scale(1)}
+.badge.pop{animation:pop .45s var(--ease)}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.5)}100%{transform:scale(1)}}
+
+.wrap{max-width:980px;margin:0 auto;padding-inline:20px;padding-block:28px 48px;display:grid;gap:44px}
 .crumb{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.04em}
 .top{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start}
 @media (max-width:760px){.top{grid-template-columns:1fr}}
-.visual{max-width:100%;background:var(--surface);border:1px solid var(--line);border-radius:6px;overflow:hidden}
-.visual img{display:block;width:100%;height:auto}
+
+.visual{position:relative;max-width:100%;background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden;cursor:zoom-in}
+.visual img{display:block;width:100%;height:auto;transition:transform .5s var(--ease)}
+.visual:hover img{transform:scale(1.04)}
+.visual .hint{position:absolute;left:12px;bottom:12px;padding:4px 10px;border-radius:99px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;opacity:0;transform:translateY(6px);transition:.3s var(--ease)}
+.visual:hover .hint{opacity:1;transform:none}
+.visual .tint{position:absolute;inset:0;pointer-events:none;mix-blend-mode:multiply;opacity:0;transition:opacity .5s,background .5s}
+
 .info{display:grid;gap:18px;min-width:0}
 h1{font-family:var(--display);font-weight:600;font-size:clamp(28px,4vw,38px);line-height:1.15;margin:0;text-wrap:balance}
 .price{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums}
@@ -28,59 +48,170 @@ h1{font-family:var(--display);font-weight:600;font-size:clamp(28px,4vw,38px);lin
 .lead{margin:0;max-width:60ch}
 .opts{display:grid;gap:8px}
 .lbl{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.lbl b{color:var(--fg);text-transform:none;letter-spacing:0;font-size:14px;margin-left:6px}
 .row{display:flex;flex-wrap:wrap;gap:8px}
-.sw{display:flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid var(--line);border-radius:99px;font-size:14px;background:var(--surface)}
-.dot{width:14px;height:14px;border-radius:50%;border:1px solid var(--line)}
-.sz{min-width:44px;text-align:center;padding:6px 10px;border:1px solid var(--line);border-radius:4px;font-family:var(--mono);font-size:13px;background:var(--surface)}
+.sw{display:flex;align-items:center;gap:8px;padding:6px 14px;border:1px solid var(--line);border-radius:99px;font-size:14px;background:var(--surface);transition:transform .2s var(--ease),border-color .2s,box-shadow .2s}
+.sw:hover,.sz:hover{transform:translateY(-2px);border-color:var(--accent)}
+.sw[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
+.dot{width:14px;height:14px;border-radius:50%;border:1px solid var(--line);transition:transform .3s var(--ease)}
+.sw[aria-pressed="true"] .dot{transform:scale(1.25)}
+.sz{min-width:48px;text-align:center;padding:7px 10px;border:1px solid var(--line);border-radius:6px;font-family:var(--mono);font-size:13px;background:var(--surface);transition:transform .2s var(--ease),background .2s,color .2s,border-color .2s}
+.sz[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+
+.stock{display:flex;align-items:center;gap:10px;font-size:14px;min-height:24px}
+.stock .pulse{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 var(--accent);animation:pulse 1.8s infinite}
+.stock.low .pulse{background:var(--warn);box-shadow:0 0 0 0 var(--warn)}
+.stock.low{color:var(--warn)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,currentColor 50%,transparent)}70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.sku{font-family:var(--mono);font-size:12px;color:var(--muted)}
+
+.buy{display:flex;gap:10px;flex-wrap:wrap}
+.qty{display:flex;align-items:center;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.qty button{width:40px;height:46px;border:0;background:none;font-size:18px;transition:color .2s}
+.qty button:hover{color:var(--accent)}
+.qty output{min-width:28px;text-align:center;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.add{flex:1;min-width:200px;position:relative;overflow:hidden;height:48px;border:0;border-radius:8px;background:var(--accent);color:var(--accent-fg);font-weight:700;letter-spacing:.02em;transition:transform .2s var(--ease),filter .2s}
+.add:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.add:active{transform:scale(.98)}
+.add .ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.45);transform:scale(0);animation:ripple .6s linear;pointer-events:none}
+@keyframes ripple{to{transform:scale(4);opacity:0}}
+.add.done{animation:shake .4s}
+.fav{width:48px;height:48px;border:1px solid var(--line);border-radius:8px;background:var(--surface);display:grid;place-items:center;transition:transform .2s var(--ease),border-color .2s}
+.fav:hover{transform:translateY(-2px);border-color:var(--accent)}
+.fav svg{width:20px;height:20px;transition:fill .3s,transform .3s var(--ease)}
+.fav[aria-pressed="true"] svg{fill:#c0392b;stroke:#c0392b;transform:scale(1.15)}
+
 ul.feat{margin:0;padding-left:18px;display:grid;gap:4px}
+
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tab{position:relative;padding:10px 14px;border:0;background:none;color:var(--muted);font-weight:700;white-space:nowrap;transition:color .2s}
+.tab::after{content:"";position:absolute;left:14px;right:14px;bottom:-1px;height:2px;background:var(--accent);transform:scaleX(0);transition:transform .3s var(--ease)}
+.tab[aria-selected="true"]{color:var(--fg)}
+.tab[aria-selected="true"]::after{transform:scaleX(1)}
+.panel{animation:fadeUp .45s var(--ease)}
+.panel[hidden]{display:none}
+
 section{display:grid;gap:14px}
 h2{font-family:var(--display);font-weight:500;font-size:22px;margin:0}
 .note{font-size:14px;color:var(--muted);margin:0}
-.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
 table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
 th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
 th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
 tr:last-child td{border-bottom:0}
+tbody tr{transition:background .25s}
+tbody tr:hover{background:var(--chip)}
+tbody tr.clk{cursor:pointer}
+tbody tr.hl{background:var(--chip);box-shadow:inset 3px 0 0 var(--accent)}
 td.mono{font-family:var(--mono);font-size:13px}
-.low{display:inline-block;padding:1px 8px;border-radius:99px;background:var(--chip);color:var(--accent);font-size:12px;font-weight:700}
-.specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;border-top:1px solid var(--line)}
+.lowtag{display:inline-block;padding:1px 8px;border-radius:99px;background:var(--chip);color:var(--warn);font-size:12px;font-weight:700}
+.meter{display:inline-block;width:70px;height:6px;border-radius:99px;background:var(--line);overflow:hidden;vertical-align:middle;margin-right:8px}
+.meter i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width 1s var(--ease)}
+.meter.low i{background:var(--warn)}
+
+.specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 24px;border-top:1px solid var(--line);margin:0}
 .specs div{padding:12px 0;border-bottom:1px solid var(--line);display:grid;gap:2px}
 .specs dt{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
 .specs dd{margin:0}
 .check{display:grid;gap:6px;margin:0;padding:0;list-style:none;font-size:14px}
 .check li::before{content:"✓ ";color:var(--accent);font-weight:700}
 footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+
+/* Animations d'entrée */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.in{opacity:0;animation:fadeUp .7s var(--ease) forwards}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.seen{opacity:1;transform:none}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+
+/* Toast */
+.toast{position:fixed;left:50%;bottom:24px;z-index:50;transform:translate(-50%,120px);display:flex;align-items:center;gap:12px;max-width:calc(100% - 32px);padding:12px 18px;border-radius:10px;background:var(--fg);color:var(--bg);font-size:14px;box-shadow:0 10px 30px rgba(0,0,0,.25);transition:transform .45s var(--ease)}
+.toast.show{transform:translate(-50%,0)}
+
+/* Lightbox */
+.lb{position:fixed;inset:0;z-index:60;background:rgba(10,12,9,.88);display:grid;place-items:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .35s}
+.lb.open{opacity:1;pointer-events:auto}
+.lb img{max-width:100%;max-height:90vh;border-radius:8px;transform:scale(.92);transition:transform .45s var(--ease)}
+.lb.open img{transform:scale(1)}
+.lb button{position:absolute;top:16px;right:16px;width:44px;height:44px;border-radius:50%;border:0;background:#fff;color:#111;font-size:22px}
+
+/* Panier */
+.drawer{position:fixed;top:0;right:0;bottom:0;z-index:55;width:min(380px,100%);background:var(--surface);border-left:1px solid var(--line);transform:translateX(100%);transition:transform .45s var(--ease);display:flex;flex-direction:column}
+.drawer.open{transform:none}
+.shade{position:fixed;inset:0;z-index:54;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .35s}
+.shade.open{opacity:1;pointer-events:auto}
+.dr-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+.dr-head h3{margin:0;font-family:var(--display);font-weight:500}
+.dr-body{flex:1;overflow:auto;padding:8px 20px}
+.line{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:12px 0;border-bottom:1px solid var(--line);animation:fadeUp .35s var(--ease)}
+.line .rm{border:0;background:none;color:var(--muted);font-size:13px;text-decoration:underline;padding:0;justify-self:start}
+.dr-foot{padding:16px 20px;border-top:1px solid var(--line);display:grid;gap:10px}
+.total{display:flex;justify-content:space-between;font-weight:700;font-size:18px}
+.empty{color:var(--muted);padding:24px 0}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.reveal,.in{opacity:1;transform:none}}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </style>
 </head>
 <body>
 
+<header class="bar">
+  <div class="bar-in">
+    <span class="brand">Atelier Nour</span>
+    <div class="tools">
+      <button class="icon-btn" id="themeBtn" aria-label="Changer de thème">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <button class="icon-btn" id="cartBtn" aria-label="Ouvrir le panier">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+        <span class="badge" id="badge">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
 <div class="wrap">
-  <div class="crumb">ATELIER NOUR / HOMME / CHEMISES</div>
+  <div class="crumb in" style="animation-delay:.05s">ATELIER NOUR / HOMME / CHEMISES</div>
 
   <div class="top">
-    <div class="visual">
+    <div class="visual in" id="visual" style="animation-delay:.1s" role="button" tabindex="0" aria-label="Agrandir l'image">
       <img src="chemise-tanger.jpg" alt="Chemise Tanger en lin écru portée de face et de dos, avec détails du tissu, du col, de la manche et de la base" width="1024" height="1536">
+      <span class="tint" id="tint"></span>
+      <span class="hint">Cliquer pour agrandir</span>
     </div>
 
     <div class="info">
-      <h1>Chemise Tanger en lin lavé, coupe droite</h1>
-      <div class="price">349 MAD <small>TVA incluse · Livraison 48 h au Maroc</small></div>
-      <p class="lead">Une chemise légère pensée pour les journées chaudes, en lin 100 % lavé qui devient plus souple à chaque lavage. Sa coupe droite tombe bien rentrée ou portée ouverte sur un t-shirt, du bureau à la plage.</p>
+      <h1 class="in" style="animation-delay:.18s">Chemise Tanger en lin lavé, coupe droite</h1>
+      <div class="price in" style="animation-delay:.24s"><span id="price">349 MAD</span> <small>TVA incluse · Livraison 48 h au Maroc</small></div>
+      <p class="lead in" style="animation-delay:.3s">Une chemise légère pensée pour les journées chaudes, en lin 100 % lavé qui devient plus souple à chaque lavage. Sa coupe droite tombe bien rentrée ou portée ouverte sur un t-shirt, du bureau à la plage.</p>
 
-      <div class="opts">
-        <span class="lbl">Couleur</span>
-        <div class="row">
-          <span class="sw"><span class="dot" style="background:#ece6d8"></span>Écru</span>
-          <span class="sw"><span class="dot" style="background:#6f7b52"></span>Olive</span>
-          <span class="sw"><span class="dot" style="background:#3b4a63"></span>Bleu nuit</span>
+      <div class="opts in" style="animation-delay:.36s">
+        <span class="lbl">Couleur <b id="colorName">Écru</b></span>
+        <div class="row" id="colors"></div>
+      </div>
+      <div class="opts in" style="animation-delay:.42s">
+        <span class="lbl">Taille <b id="sizeName">M</b></span>
+        <div class="row" id="sizes"></div>
+      </div>
+
+      <div class="in" style="animation-delay:.48s;display:grid;gap:4px">
+        <div class="stock" id="stock"><span class="pulse"></span><span id="stockTxt"></span></div>
+        <span class="sku" id="sku"></span>
+      </div>
+
+      <div class="buy in" style="animation-delay:.54s">
+        <div class="qty">
+          <button id="minus" aria-label="Diminuer la quantité">−</button>
+          <output id="qty">1</output>
+          <button id="plus" aria-label="Augmenter la quantité">+</button>
         </div>
-      </div>
-      <div class="opts">
-        <span class="lbl">Taille</span>
-        <div class="row"><span class="sz">S</span><span class="sz">M</span><span class="sz">L</span><span class="sz">XL</span></div>
+        <button class="add" id="add">Ajouter au panier</button>
+        <button class="fav" id="fav" aria-pressed="false" aria-label="Ajouter aux favoris">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.4-9.3-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.3 6C19 16.6 12 21 12 21z"/></svg>
+        </button>
       </div>
 
-      <ul class="feat">
+      <ul class="feat in" style="animation-delay:.6s">
         <li>Lin européen 100 %, grammage 150 g/m²</li>
         <li>Col classique, boutons en nacre végétale (corozo)</li>
         <li>Une poche poitrine, base arrondie</li>
@@ -89,55 +220,46 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
     </div>
   </div>
 
-  <section>
-    <h2>Caractéristiques</h2>
-    <dl class="specs">
-      <div><dt>Matière</dt><dd>100 % lin lavé</dd></div>
-      <div><dt>Grammage</dt><dd>150 g/m²</dd></div>
-      <div><dt>Coupe</dt><dd>Droite, longueur hanche</dd></div>
-      <div><dt>Fermeture</dt><dd>7 boutons corozo</dd></div>
-      <div><dt>Entretien</dt><dd>30 °C, séchage à plat, repassage doux</dd></div>
-      <div><dt>Fabrication</dt><dd>Confectionnée à Tanger</dd></div>
-    </dl>
+  <section class="reveal">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-p="p1">Caractéristiques</button>
+      <button class="tab" role="tab" aria-selected="false" data-p="p2">Guide des tailles</button>
+      <button class="tab" role="tab" aria-selected="false" data-p="p3">Variantes et stock</button>
+    </div>
+
+    <div class="panel" id="p1" role="tabpanel">
+      <dl class="specs">
+        <div><dt>Matière</dt><dd>100 % lin lavé</dd></div>
+        <div><dt>Grammage</dt><dd>150 g/m²</dd></div>
+        <div><dt>Coupe</dt><dd>Droite, longueur hanche</dd></div>
+        <div><dt>Fermeture</dt><dd>7 boutons corozo</dd></div>
+        <div><dt>Entretien</dt><dd>30 °C, séchage à plat, repassage doux</dd></div>
+        <div><dt>Fabrication</dt><dd>Confectionnée à Tanger</dd></div>
+      </dl>
+    </div>
+
+    <div class="panel" id="p2" role="tabpanel" hidden>
+      <div style="display:grid;gap:14px">
+        <p class="note">Mesures du vêtement à plat, en centimètres, tolérance ± 1 cm. Le mannequin mesure 1,80 m et porte la taille M. Cliquez sur une ligne pour choisir la taille.</p>
+        <div class="tbl"><table>
+          <thead><tr><th>Taille</th><th>Tour de poitrine</th><th>Longueur dos</th><th>Épaules</th><th>Longueur manche</th></tr></thead>
+          <tbody id="guide"></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="panel" id="p3" role="tabpanel" hidden>
+      <div style="display:grid;gap:14px">
+        <p class="note">Format SKU : marque, modèle, couleur, taille. Seuil d'alerte réassort fixé à 10 unités. Cliquez sur une ligne pour sélectionner la variante.</p>
+        <div class="tbl"><table>
+          <thead><tr><th>SKU</th><th>Couleur</th><th>Taille</th><th>Stock</th><th>Statut</th></tr></thead>
+          <tbody id="variants"></tbody>
+        </table></div>
+      </div>
+    </div>
   </section>
 
-  <section>
-    <h2>Variantes et stock</h2>
-    <p class="note">Format SKU : marque, modèle, couleur, taille. Seuil d'alerte réassort fixé à 10 unités.</p>
-    <div class="tbl"><table>
-      <thead><tr><th>SKU</th><th>Couleur</th><th>Taille</th><th>Stock</th><th>Statut</th></tr></thead>
-      <tbody>
-        <tr><td class="mono">AN-TNG-ECR-S</td><td>Écru</td><td>S</td><td>18</td><td>En stock</td></tr>
-        <tr><td class="mono">AN-TNG-ECR-M</td><td>Écru</td><td>M</td><td>32</td><td>En stock</td></tr>
-        <tr><td class="mono">AN-TNG-ECR-L</td><td>Écru</td><td>L</td><td>27</td><td>En stock</td></tr>
-        <tr><td class="mono">AN-TNG-ECR-XL</td><td>Écru</td><td>XL</td><td>9</td><td><span class="low">Réassort</span></td></tr>
-        <tr><td class="mono">AN-TNG-OLV-S</td><td>Olive</td><td>S</td><td>12</td><td>En stock</td></tr>
-        <tr><td class="mono">AN-TNG-OLV-M</td><td>Olive</td><td>M</td><td>24</td><td>En stock</td></tr>
-        <tr><td class="mono">AN-TNG-OLV-L</td><td>Olive</td><td>L</td><td>20</td><td>En stock</td></tr>
-        <tr><td class="mono">AN-TNG-OLV-XL</td><td>Olive</td><td>XL</td><td>6</td><td><span class="low">Réassort</span></td></tr>
-        <tr><td class="mono">AN-TNG-BLN-S</td><td>Bleu nuit</td><td>S</td><td>15</td><td>En stock</td></tr>
-        <tr><td class="mono">AN-TNG-BLN-M</td><td>Bleu nuit</td><td>M</td><td>29</td><td>En stock</td></tr>
-        <tr><td class="mono">AN-TNG-BLN-L</td><td>Bleu nuit</td><td>L</td><td>22</td><td>En stock</td></tr>
-        <tr><td class="mono">AN-TNG-BLN-XL</td><td>Bleu nuit</td><td>XL</td><td>11</td><td>En stock</td></tr>
-      </tbody>
-    </table></div>
-  </section>
-
-  <section>
-    <h2>Guide des tailles</h2>
-    <p class="note">Mesures du vêtement à plat, en centimètres, tolérance ± 1 cm. Le mannequin mesure 1,80 m et porte la taille M.</p>
-    <div class="tbl"><table>
-      <thead><tr><th>Taille</th><th>Tour de poitrine</th><th>Longueur dos</th><th>Épaules</th><th>Longueur manche</th></tr></thead>
-      <tbody>
-        <tr><td>S</td><td>104</td><td>72</td><td>44</td><td>62</td></tr>
-        <tr><td>M</td><td>110</td><td>74</td><td>46</td><td>63</td></tr>
-        <tr><td>L</td><td>116</td><td>76</td><td>48</td><td>64</td></tr>
-        <tr><td>XL</td><td>122</td><td>78</td><td>50</td><td>65</td></tr>
-      </tbody>
-    </table></div>
-  </section>
-
-  <section>
+  <section class="reveal">
     <h2>Contrôle avant mise en ligne</h2>
     <ul class="check">
       <li>Titre sous 70 caractères, avec matière et coupe</li>
@@ -148,7 +270,191 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
     </ul>
   </section>
 
-  <footer>Exercice de portfolio réalisé par Achraf Belghiti. Atelier Nour est une marque fictive créée pour cet exemple.</footer>
+  <footer class="reveal">Exercice de portfolio réalisé par Achraf Belghiti. Atelier Nour est une marque fictive créée pour cet exemple.</footer>
 </div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<div class="lb" id="lb" aria-hidden="true">
+  <img src="chemise-tanger.jpg" alt="Chemise Tanger en grand format">
+  <button id="lbClose" aria-label="Fermer">×</button>
+</div>
+
+<div class="shade" id="shade"></div>
+<aside class="drawer" id="drawer" aria-label="Panier">
+  <div class="dr-head"><h3>Votre panier</h3><button class="icon-btn" id="drClose" aria-label="Fermer le panier">×</button></div>
+  <div class="dr-body" id="lines"></div>
+  <div class="dr-foot">
+    <div class="total"><span>Total</span><span id="total">0 MAD</span></div>
+    <p class="note">Boutique de démonstration, aucune commande réelle n'est passée.</p>
+  </div>
+</aside>
+
+<script>
+const PRICE = 349;
+const COLORS = [
+  {code:"ECR", name:"Écru", hex:"#ece6d8", tint:"transparent"},
+  {code:"OLV", name:"Olive", hex:"#6f7b52", tint:"#8a9568"},
+  {code:"BLN", name:"Bleu nuit", hex:"#3b4a63", tint:"#5b6d8c"}
+];
+const SIZES = ["S","M","L","XL"];
+const STOCK = {ECR:{S:18,M:32,L:27,XL:9}, OLV:{S:12,M:24,L:20,XL:6}, BLN:{S:15,M:29,L:22,XL:11}};
+const GUIDE = {S:[104,72,44,62], M:[110,74,46,63], L:[116,76,48,64], XL:[122,78,50,65]};
+const MAX = 32;
+
+let color = "ECR", size = "M", qty = 1, cart = [];
+const $ = id => document.getElementById(id);
+const fmt = n => n.toLocaleString("fr-FR") + " MAD";
+
+// Pastilles couleur
+COLORS.forEach(c => {
+  const b = document.createElement("button");
+  b.className = "sw"; b.dataset.c = c.code;
+  b.innerHTML = `<span class="dot" style="background:${c.hex}"></span>${c.name}`;
+  b.onclick = () => select(c.code, size);
+  $("colors").append(b);
+});
+// Tailles
+SIZES.forEach(s => {
+  const b = document.createElement("button");
+  b.className = "sz"; b.dataset.s = s; b.textContent = s;
+  b.onclick = () => select(color, s);
+  $("sizes").append(b);
+});
+// Guide des tailles
+SIZES.forEach(s => {
+  const tr = document.createElement("tr");
+  tr.className = "clk"; tr.dataset.s = s;
+  tr.innerHTML = `<td><b>${s}</b></td>` + GUIDE[s].map(v => `<td>${v}</td>`).join("");
+  tr.onclick = () => select(color, s);
+  $("guide").append(tr);
+});
+// Variantes
+COLORS.forEach(c => SIZES.forEach(s => {
+  const n = STOCK[c.code][s], low = n < 10;
+  const tr = document.createElement("tr");
+  tr.className = "clk"; tr.dataset.v = c.code + s;
+  tr.innerHTML = `<td class="mono">AN-TNG-${c.code}-${s}</td><td>${c.name}</td><td>${s}</td>
+    <td><span class="meter ${low ? "low" : ""}"><i data-w="${Math.round(n / MAX * 100)}"></i></span>${n}</td>
+    <td>${low ? '<span class="lowtag">Réassort</span>' : "En stock"}</td>`;
+  tr.onclick = () => { select(c.code, s); window.scrollTo({top:0, behavior:"smooth"}); };
+  $("variants").append(tr);
+}));
+
+function select(c, s){
+  color = c; size = s;
+  const col = COLORS.find(x => x.code === c);
+  document.querySelectorAll(".sw").forEach(b => b.setAttribute("aria-pressed", b.dataset.c === c));
+  document.querySelectorAll(".sz").forEach(b => b.setAttribute("aria-pressed", b.dataset.s === s));
+  document.querySelectorAll("#guide tr").forEach(r => r.classList.toggle("hl", r.dataset.s === s));
+  document.querySelectorAll("#variants tr").forEach(r => r.classList.toggle("hl", r.dataset.v === c + s));
+  $("colorName").textContent = col.name;
+  $("sizeName").textContent = s;
+  $("tint").style.background = col.tint;
+  $("tint").style.opacity = c === "ECR" ? 0 : .35;
+  const n = STOCK[c][s];
+  $("stock").classList.toggle("low", n < 10);
+  $("stockTxt").textContent = n < 10 ? `Plus que ${n} pièces, réassort prévu` : `En stock, ${n} pièces disponibles`;
+  $("sku").textContent = `SKU AN-TNG-${c}-${s}`;
+  if (qty > n) setQty(n);
+  updatePrice();
+}
+function setQty(v){
+  qty = Math.max(1, Math.min(v, STOCK[color][size]));
+  $("qty").textContent = qty;
+  updatePrice();
+}
+function updatePrice(){ $("price").textContent = fmt(PRICE * qty); }
+$("minus").onclick = () => setQty(qty - 1);
+$("plus").onclick = () => setQty(qty + 1);
+
+// Ajout au panier
+$("add").addEventListener("click", e => {
+  const btn = e.currentTarget, r = btn.getBoundingClientRect(), d = Math.max(r.width, r.height);
+  const rip = document.createElement("span");
+  rip.className = "ripple";
+  rip.style.cssText = `width:${d}px;height:${d}px;left:${e.clientX - r.left - d/2}px;top:${e.clientY - r.top - d/2}px`;
+  btn.append(rip); setTimeout(() => rip.remove(), 600);
+
+  const key = color + size, inCart = cart.find(l => l.key === key);
+  const already = inCart ? inCart.q : 0;
+  if (already + qty > STOCK[color][size]) { btn.classList.remove("done"); void btn.offsetWidth; btn.classList.add("done"); toast("Stock insuffisant pour cette variante"); return; }
+  if (inCart) inCart.q += qty; else cart.push({key, c:color, s:size, q:qty});
+  btn.textContent = "Ajouté ✓";
+  setTimeout(() => btn.textContent = "Ajouter au panier", 1400);
+  const col = COLORS.find(x => x.code === color).name;
+  toast(`${qty} × Chemise Tanger ${col}, taille ${size} ajoutée au panier`);
+  renderCart(true);
+});
+
+function renderCart(bump){
+  const count = cart.reduce((a, l) => a + l.q, 0);
+  const b = $("badge");
+  b.textContent = count; b.classList.toggle("on", count > 0);
+  if (bump) { b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop"); }
+  $("lines").innerHTML = cart.length ? "" : '<p class="empty">Votre panier est vide.</p>';
+  cart.forEach((l, i) => {
+    const col = COLORS.find(x => x.code === l.c).name;
+    const div = document.createElement("div");
+    div.className = "line";
+    div.innerHTML = `<span>Chemise Tanger<br><small class="sku">${col} · ${l.s} · × ${l.q}</small></span><b>${fmt(PRICE * l.q)}</b>`;
+    const rm = document.createElement("button");
+    rm.className = "rm"; rm.textContent = "Retirer";
+    rm.onclick = () => { cart.splice(i, 1); renderCart(); };
+    div.append(rm); $("lines").append(div);
+  });
+  $("total").textContent = fmt(cart.reduce((a, l) => a + PRICE * l.q, 0));
+}
+
+let tt;
+function toast(msg){
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(tt); tt = setTimeout(() => t.classList.remove("show"), 2600);
+}
+
+// Favoris
+$("fav").onclick = e => {
+  const on = e.currentTarget.getAttribute("aria-pressed") !== "true";
+  e.currentTarget.setAttribute("aria-pressed", on);
+  toast(on ? "Ajoutée à vos favoris" : "Retirée de vos favoris");
+};
+
+// Panier latéral
+const openCart = o => { $("drawer").classList.toggle("open", o); $("shade").classList.toggle("open", o); };
+$("cartBtn").onclick = () => openCart(true);
+$("drClose").onclick = $("shade").onclick = () => openCart(false);
+
+// Visionneuse
+const openLb = o => { $("lb").classList.toggle("open", o); $("lb").setAttribute("aria-hidden", !o); };
+$("visual").onclick = () => openLb(true);
+$("visual").onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openLb(true); } };
+$("lbClose").onclick = () => openLb(false);
+$("lb").onclick = e => { if (e.target.id === "lb") openLb(false); };
+document.addEventListener("keydown", e => { if (e.key === "Escape") { openLb(false); openCart(false); } });
+
+// Onglets
+document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
+  document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", x === t));
+  document.querySelectorAll(".panel").forEach(p => p.hidden = p.id !== t.dataset.p);
+  if (t.dataset.p === "p3") fillMeters();
+});
+function fillMeters(){
+  document.querySelectorAll(".meter i").forEach(i => { i.style.width = "0"; requestAnimationFrame(() => requestAnimationFrame(() => i.style.width = i.dataset.w + "%")); });
+}
+
+// Thème
+$("themeBtn").onclick = () => {
+  const root = document.documentElement;
+  const dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  root.dataset.theme = dark ? "light" : "dark";
+};
+
+// Apparition au défilement
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("seen"); io.unobserve(e.target); } }), {threshold:.12});
+document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+select(color, size);
+renderCart();
+</script>
 </body>
 </html>
